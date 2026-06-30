@@ -1,0 +1,5 @@
+/tmp/crontinel-sandbox-*
+*.gem
+__pycache__/
+dist/
+*.pyc

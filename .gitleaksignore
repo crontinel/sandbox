@@ -1,0 +1,2 @@
+# False positive: "invalid-key" is a deliberate test value in trigger auth tests
+tests/10-trigger.sh:curl-auth-header:.*

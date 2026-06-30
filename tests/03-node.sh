@@ -41,7 +41,7 @@ else
     exit 1
 fi
 
-# Create test script — test both SDK constructor and direct ingest API
+# Create test script — test SDK constructors, notify methods, and direct ingest
 cat > test.mjs << 'JSEOF'
 import { Crontinel } from '@crontinel/node';
 
@@ -55,15 +55,29 @@ console.log('CONSTRUCTOR: OK');
 console.log('API_KEY:', process.env.CRONTINEL_API_KEY ? 'SET' : 'MISSING');
 console.log('API_URL:', process.env.CRONTINEL_API_URL);
 
-// Test that SDK makes correct HTTP calls (will fail with "Method not found"
-// if notify/* handlers not deployed, but proves transport/auth work)
 async function main() {
+    // Test event() — uses notify/event MCP method
     try {
-        await client.event({ key: 'sandbox-test', message: 'test', state: 'info' });
+        await client.event({ key: 'sandbox-test', message: 'Node SDK test', state: 'info' });
         console.log('EVENT: OK');
     } catch (e) {
-        // "Method not found" means transport/auth works but server needs notify/* handlers
-        console.log('EVENT_TRANSPORT:', e.message.includes('Method not found') ? 'OK (method not deployed)' : e.message);
+        console.log('EVENT_FAIL:', e.message);
+    }
+
+    // Test scheduleRun() — uses notify/schedule_run MCP method
+    try {
+        await client.scheduleRun({ command: 'node-sandbox-test', duration_ms: 100, exit_code: 0 });
+        console.log('SCHEDULE_RUN: OK');
+    } catch (e) {
+        console.log('SCHEDULE_RUN_FAIL:', e.message);
+    }
+
+    // Test queueProcessed() — uses notify/queue_processed MCP method
+    try {
+        await client.queueProcessed({ queue: 'test-queue', processed: 5, failed: 0 });
+        console.log('QUEUE_PROCESSED: OK');
+    } catch (e) {
+        console.log('QUEUE_PROCESSED_FAIL:', e.message);
     }
 }
 main().catch(e => { console.error('FATAL:', e.message); process.exit(1); });
@@ -74,11 +88,23 @@ NODE_OUTPUT=$(node test.mjs 2>&1) || true
 echo "$NODE_OUTPUT" | grep -q "CONSTRUCTOR: OK" && pass "SDK constructor works" || fail "SDK constructor failed"
 
 if echo "$NODE_OUTPUT" | grep -q "EVENT: OK"; then
-    pass "SDK event() — connected to server"
-elif echo "$NODE_OUTPUT" | grep -q "EVENT_TRANSPORT: OK"; then
-    skip "SDK event() — transport OK, notify/* handlers not on server yet"
+    pass "SDK event() — notify/event handled"
+elif echo "$NODE_OUTPUT" | grep -q "EVENT_FAIL:"; then
+    fail "SDK event() — $(echo "$NODE_OUTPUT" | grep EVENT_FAIL | head -1)"
 else
-    fail "SDK event() — transport failure"
+    fail "SDK event() — unknown result"
+fi
+
+if echo "$NODE_OUTPUT" | grep -q "SCHEDULE_RUN: OK"; then
+    pass "SDK scheduleRun() — notify/schedule_run handled"
+elif echo "$NODE_OUTPUT" | grep -q "SCHEDULE_RUN_FAIL:"; then
+    fail "SDK scheduleRun() — $(echo "$NODE_OUTPUT" | grep SCHEDULE_RUN_FAIL | head -1)"
+fi
+
+if echo "$NODE_OUTPUT" | grep -q "QUEUE_PROCESSED: OK"; then
+    pass "SDK queueProcessed() — notify/queue_processed handled"
+elif echo "$NODE_OUTPUT" | grep -q "QUEUE_PROCESSED_FAIL:"; then
+    fail "SDK queueProcessed() — $(echo "$NODE_OUTPUT" | grep QUEUE_PROCESSED_FAIL | head -1)"
 fi
 
 # Also test the direct ingest/ping endpoint (always available)

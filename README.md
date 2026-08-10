@@ -26,6 +26,8 @@ Each framework package gets a standalone test script that:
 | 08 | **Ruby** | Ruby (gem) | `tests/08-ruby.sh` |
 | 09 | **Rails** | Ruby on Rails | `tests/09-rails.sh` |
 | 10 | **Trigger** | Cloud API | `tests/10-trigger.sh` |
+| 11 | **.NET** | C# (NuGet) | `tests/11-dotnet.sh` |
+| 12 | **MCP Server** | Node (stdio JSON-RPC) | `tests/12-mcp.sh` |
 
 ## Prerequisites
 

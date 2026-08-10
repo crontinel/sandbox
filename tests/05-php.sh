@@ -19,7 +19,7 @@ require_cmd php || { summary "PHP Core"; exit 1; }
 cd "$SANDBOX"
 
 # Create minimal composer.json pointing to local package
-cat > composer.json <<'COMPOSER_JSON'
+cat > composer.json <<COMPOSER_JSON
 {
     "name": "crontinel/sandbox-test",
     "description": "Sandbox test for crontinel/php",
@@ -30,7 +30,7 @@ cat > composer.json <<'COMPOSER_JSON'
     "repositories": [
         {
             "type": "path",
-            "url": "/Users/ray/Work/crontinel/php",
+            "url": "$CRONTINEL_REPOS_DIR/php",
             "options": {
                 "symlink": false,
                 "canonical": false

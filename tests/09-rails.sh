@@ -27,8 +27,8 @@ else
 fi
 
 # Paths to local gem sources
-CRONTINEL_RUBY_PATH="/Users/ray/Work/crontinel/ruby"
-CRONTINEL_RAILS_PATH="/Users/ray/Work/crontinel/ruby-on-rails"
+CRONTINEL_RUBY_PATH="$CRONTINEL_REPOS_DIR/ruby"
+CRONTINEL_RAILS_PATH="$CRONTINEL_REPOS_DIR/ruby-on-rails"
 
 if [ ! -f "$CRONTINEL_RUBY_PATH/crontinel.gemspec" ]; then
     fail "crontinel Ruby gem not found at $CRONTINEL_RUBY_PATH"

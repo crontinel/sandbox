@@ -1,0 +1,60 @@
+name: E2E Sandbox
+
+on:
+  push:
+    branches: [main, feature/initial-sandbox]
+  pull_request:
+    branches: [main, feature/initial-sandbox]
+  schedule:
+    # Run the full suite daily so drift across SDKs/backend is caught
+    # even when nobody is actively pushing to this repo.
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  sandbox:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Sibling SDK repos the local-path tests build against — mirrors the
+      # maintainer's local `/Users/ray/Work/crontinel/<repo>` layout via
+      # CRONTINEL_REPOS_DIR below instead of relying on that machine.
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/php
+          path: siblings/php
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/go
+          path: siblings/go
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/rust
+          path: siblings/rust
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/ruby
+          path: siblings/ruby
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/ruby-on-rails
+          path: siblings/ruby-on-rails
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/python
+          path: siblings/python
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/dotnet-sdk
+          path: siblings/dotnet-sdk
+      - uses: actions/checkout@v4
+        with:
+          repository: crontinel/mcp-server
+          path: siblings/mcp-server
+
+      - name: Run full sandbox suite
+        env:
+          CRONTINEL_API_KEY: ${{ secrets.CRONTINEL_API_KEY }}
+          CRONTINEL_REPOS_DIR: ${{ github.workspace }}/siblings
+        run: ./run-all.sh

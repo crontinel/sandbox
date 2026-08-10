@@ -30,7 +30,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-crontinel = { path = "/Users/ray/Work/crontinel/rust" }
+crontinel = { path = "$CRONTINEL_REPOS_DIR/rust" }
 TOMLEOF
 pass "Cargo.toml with path dependency"
 

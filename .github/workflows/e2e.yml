@@ -1,0 +1,23 @@
+name: E2E Sandbox
+
+on:
+  push:
+    branches: [main, feature/initial-sandbox]
+  pull_request:
+    branches: [main, feature/initial-sandbox]
+  schedule:
+    # Run the full suite daily so drift across SDKs/backend is caught
+    # even when nobody is actively pushing to this repo.
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  sandbox:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run full sandbox suite
+        env:
+          CRONTINEL_API_KEY: ${{ secrets.CRONTINEL_API_KEY }}
+        run: ./run-all.sh

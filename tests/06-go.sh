@@ -27,7 +27,7 @@ else
 fi
 
 # Add replace directive to use local crontinel/go package
-GO_PKG_DIR="/Users/ray/Work/crontinel/go"
+GO_PKG_DIR="$CRONTINEL_REPOS_DIR/go"
 go mod edit -replace "crontinel/go=$GO_PKG_DIR"
 pass "added replace directive for local crontinel/go"
 

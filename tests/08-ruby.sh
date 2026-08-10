@@ -32,7 +32,7 @@ cd "$SANDBOX"
 GEM_HOME="$SANDBOX/gems"
 
 # Build the .gem from the local source
-if gem build /Users/ray/Work/crontinel/ruby/crontinel.gemspec --output "$SANDBOX/crontinel-0.1.0.gem" 2>/dev/null; then
+if gem build $CRONTINEL_REPOS_DIR/ruby/crontinel.gemspec --output "$SANDBOX/crontinel-0.1.0.gem" 2>/dev/null; then
     pass "gem built successfully"
 else
     fail "gem build failed"

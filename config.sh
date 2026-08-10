@@ -7,7 +7,12 @@ CRONTINEL_API_URL="${CRONTINEL_API_URL:-https://app.crontinel.com}"
 # API key — MUST be set via CRONTINEL_API_KEY env var
 : "${CRONTINEL_API_KEY:?CRONTINEL_API_KEY env var is required}"
 
-export CRONTINEL_API_KEY CRONTINEL_API_URL
+# Base dir containing sibling SDK repo checkouts (php/, go/, rust/, ruby/,
+# ruby-on-rails/, python/, dotnet-sdk/, mcp-server/). Defaults to the
+# maintainer's local layout; CI sets this to the workflow's checkout dir.
+CRONTINEL_REPOS_DIR="${CRONTINEL_REPOS_DIR:-/Users/ray/Work/crontinel}"
+
+export CRONTINEL_API_KEY CRONTINEL_API_URL CRONTINEL_REPOS_DIR
 
 # Colors
 GREEN='\033[0;32m'

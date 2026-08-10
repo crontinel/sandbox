@@ -30,7 +30,7 @@ source venv/bin/activate
 pip install --upgrade pip --quiet 2>/dev/null
 pass "pip upgraded"
 
-if pip install -e "/Users/ray/Work/crontinel/python[httpx]" --quiet 2>/dev/null; then
+if pip install -e "$CRONTINEL_REPOS_DIR/python[httpx]" --quiet 2>/dev/null; then
     pass "pip install crontinel[httpx]"
 else
     fail "pip install crontinel[httpx] failed"

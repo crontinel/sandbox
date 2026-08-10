@@ -16,7 +16,7 @@ rm -rf "$SANDBOX"
 require_cmd node || { summary "MCP Server"; exit 1; }
 require_cmd npm || { summary "MCP Server"; exit 1; }
 
-MCP_PKG_DIR="/Users/ray/Work/crontinel/mcp-server"
+MCP_PKG_DIR="$CRONTINEL_REPOS_DIR/mcp-server"
 
 if [ ! -f "$MCP_PKG_DIR/package.json" ]; then
     fail "crontinel mcp-server not found at $MCP_PKG_DIR"

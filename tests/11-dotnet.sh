@@ -14,7 +14,7 @@ rm -rf "$SANDBOX"
 
 require_cmd dotnet || { summary ".NET"; exit 1; }
 
-DOTNET_PKG_DIR="/Users/ray/Work/crontinel/dotnet-sdk"
+DOTNET_PKG_DIR="$CRONTINEL_REPOS_DIR/dotnet-sdk"
 
 if [ ! -f "$DOTNET_PKG_DIR/src/Crontinel/Crontinel.csproj" ]; then
     fail "crontinel dotnet-sdk not found at $DOTNET_PKG_DIR"
